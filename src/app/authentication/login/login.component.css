@@ -1,0 +1,52 @@
+body {
+  background: linear-gradient( #FF3636, #272727);
+  height: 100vh;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-card {
+  background-color: #FFFFFF;
+  width: 300px;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+}
+
+.login-card h2 {
+  color: #272727;
+}
+
+.login-card input[type="text"] ,
+.login-card input[type="email"] ,
+.login-card input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.login-card button {
+  background-color: #FF3636;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+
+.logo {
+  margin-bottom: 20px;
+}
+
+.logo img {
+
+  display: block; /* Para centrar horizontalmente */
+  margin: 0 auto; /* Para centrar horizontalmente */
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}

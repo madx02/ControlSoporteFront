@@ -1,0 +1,21 @@
+.content{
+  display: flex;
+  height: 100%;
+}
+.match-parent {
+  width: 50%;
+  height: 75%;
+  margin: 100px 100px;
+}
+
+.geocoder {
+  position: absolute;
+  z-index: 1;
+  width: 75%;
+  left: 43%;
+  margin-left: -25%;
+  top: 35px;
+  }
+  .mapboxgl-ctrl-geocoder {
+  min-width: 100%;
+  }
