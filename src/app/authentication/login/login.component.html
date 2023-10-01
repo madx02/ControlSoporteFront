@@ -7,12 +7,38 @@
 <body>
   <div class="login-card">
     <div class="logo">
-      <img src="../../../assets/img/logo.png" alt="">
+      <img src="assets/img/logo.png" alt="">
     </div>
     <h2>Iniciar sesión</h2>
+
     <form [formGroup]="loginForm" (ngSubmit)="login()">
-      <input type="email" placeholder="Usuario" formControlName="correo">
-      <input type="password" placeholder="Contraseña" formControlName="password" >
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="full-width" appearance="fill">
+            <mat-label>Usuario</mat-label>
+            <input matInput placeholder="Ingrese correo eléctronico" autocomplete="correo" formControlName="correo">
+            <mat-error *ngIf="loginForm.controls['correo'].hasError('email') && !loginForm.hasError('required')">
+              Ingrese un correo de usuario valido
+            </mat-error>
+
+            <mat-error *ngIf="loginForm.controls['correo'].hasError('required')">
+              EL correo es <strong>requerido</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>Contraseña</mat-label>
+            <input matInput [type]="hide ? 'password' : 'text'"  autocomplete="password" formControlName="password">
+            <button mat-icon-button matSuffix (click)="hide = !hide"  [attr.aria-pressed]="hide">
+              <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
+          </mat-form-field>
+        </div>
+      </div>
+
       <button type="submit" [disabled]="loginForm.invalid">Iniciar sesión</button>
     </form>
   </div>

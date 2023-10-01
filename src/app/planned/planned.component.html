@@ -1,0 +1,129 @@
+<div class="panel-header panel-header-sm">
+</div>
+<div class="main-content">
+  <div class="row">
+    <div class="col-md-5">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="title">Planificaciones</h5>
+        </div>
+        <div class="card-body" [formGroup]="plannedForm">
+          <div class="row">
+            <div class="col">
+              <mat-form-field class="full-width" appearance="outline">
+                <mat-label>Número de Planificación</mat-label>
+                <input matInput placeholder="Castillo Robles" autocomplete="off" formControlName="idPlanned">
+
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <mat-form-field class="full-width" appearance="outline">
+                <mat-label>Cliente a Asignar </mat-label>
+                <mat-select name="clientes" formControlName="cliente">
+                  <mat-option *ngFor="let item of customerList" [value]="item">
+                    {{item.nombreComercial}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <mat-form-field class="full-width" appearance="outline">
+                <mat-label>Técnico a Asignar </mat-label>
+                <mat-select name="tecnicos" formControlName="usuario">
+                  <mat-option *ngFor="let item of userList" [value]="item.uid">
+                    {{item.nombres}}({{item.puesto}})
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <mat-form-field class="full-width" appearance="outline">
+                <mat-label>Fecha Programacion</mat-label>
+                <input matInput [matDatepicker]="picker" formControlName="fecha_programada">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <mat-form-field class="full-width" appearance="outline">
+                <mat-label>Descripcion</mat-label>
+                <input matInput placeholder="Descripcion de la planeación" autocomplete="off" formControlName="descripcion">
+
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <mat-form-field class="full-width" appearance="outline">
+                <mat-label>Estado Planificacion </mat-label>
+                <mat-select name="plannedStatus" formControlName="situacion">
+                  <mat-option *ngFor="let item of plannedState" [value]="item.situacion">
+                   {{item.descripcion}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-6">
+              <button class="btn btn-primary mt-4" style="width: 100%;" (click)="formValidation()">Guardar</button>
+            </div>
+            <div class="col-6">
+              <button class="btn btn-default mt-4" style="width: 100%;" (click)="resetForm()">Limpiar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-7"  >
+      <div class="card">
+        <div class="card-header">
+          <h4 class="card-title"> Listado de Planificaciones</h4>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col">
+              <div class="table-responsive" style="max-height: 420px;">
+                <table class="table">
+                  <thead>
+
+
+                      <th>Planificación</th>
+
+                      <th>Cliente</th>
+                      <th>Técnico</th>
+                      <th>Editar</th>
+
+
+                  </thead>
+                  <tbody class="fontTableBody">
+                    <tr *ngFor="let item of plannedList">
+                      <td> {{ item.idPlanned}} </td>
+                      <td> {{ item.cliente.nombreComercial}} </td>
+                      <td> {{ item.usuario.nombres}} </td>
+                      <td>
+                        <button mat-icon-button (click)="editPlannedForm(item)" >
+                          <mat-icon>edit</mat-icon>
+                        </button>
+                      </td>
+
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

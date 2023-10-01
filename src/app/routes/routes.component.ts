@@ -1,6 +1,11 @@
 import { Component, OnInit } from "@angular/core";
-import mapboxgl from "mapbox-gl";
-import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder"
+import { ApiService } from "../core/service/api.service";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { ToastrService } from "ngx-toastr";
+import { RespRuta, Ruta } from "../core/models/RespRuta";
+import { HttpErrorResponse } from "@angular/common/http";
+import Swal from "sweetalert2";
+
 
 @Component({
   selector: "app-routes",
@@ -8,71 +13,135 @@ import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder"
   styleUrls: ["./routes.component.scss"],
 })
 export class RoutesComponent implements OnInit {
-  map: mapboxgl.Map;
-  style = 'mapbox://styles/mapbox/streets-v11';
-  lat = 23.87668;
-  lng = 71.3576;
-  geocoder: any;
-  address: string;
-  long: any;
-  latitude: any;
-  constructor() {}
+  routesList: Ruta[];
+  routeForm: FormGroup;
+
+  constructor(
+    private apiService: ApiService,
+    private fb: FormBuilder,
+    private toastr: ToastrService
+  ) {
+    this.routeForm = this.createFomRoute();
+  }
 
   ngOnInit(): void {
-    // mapboxgl.accessToken = 'pk.eyJ1IjoiaGhlcm5hbmRlejQ3MyIsImEiOiJjbG15YWU5YTAxOGIxMmxxZmM3ZWY4bzE1In0.W69Y1i0j93M3gmQ8ccwygQ';
-    // this.map = new mapboxgl.Map({
-    //   container: 'map',
-    //   style: 'mapbox://styles/mapbox/streets-v11',
-    //   center: [-74.5, 40],
-    //   zoom: 9
-    // });
+    this.getRoutes();
+  }
 
-    mapboxgl.accessToken =
-      "pk.eyJ1IjoiaGhlcm5hbmRlejQ3MyIsImEiOiJjbG15Nmo3YmcxODhyMmtvY3FhMmpmNmx5In0.JtSoOAv5e2lS2mLYg-qGNw";
-    this.map = new mapboxgl.Map({
-      container: "map", // container ID
-      style: "mapbox://styles/mapbox/streets-v12", // style URL
-      center: [-74.5, 40], // starting position [lng, lat]
-      zoom: 9, // starting zoom
+  private getRoutes() {
+    this.apiService.get("rutas").subscribe(
+      (resp: RespRuta) => {
+        this.routesList = resp.datos;
+      },
+
+      (error: HttpErrorResponse) => {
+        // Si sucede un error
+        console.error(error);
+      }
+    );
+  }
+
+  createFomRoute(data?: Ruta) {
+    return this.fb.group({
+      uid: data?.uid || "",
+      nombre: [data?.nombre || "", [Validators.required]],
+      descripcion: [data?.descripcion || "", [Validators.required]],
+      region: [data?.region || "", [Validators.required]],
     });
-    this.map.addControl(new mapboxgl.NavigationControl());
-    this.geocoding();
-
   }
 
-  geocoding() {
-    this.geocoder = new MapboxGeocoder({
-      accessToken: mapboxgl.accessToken,
-      // countries: 'us',
-      // filter: function (item) {
-      //   return item.context
-      //   .map(function (i) {
-      //   return (
-      //   i.id.split('.').shift() === 'region' &&
-      //   i.text === 'California'
-      //   );
-      //   })
-      //   .reduce(function (acc, cur) {
-      //   return acc || cur;
-      //   });
-      //   },
-      mapboxgl: mapboxgl
-      });
-      document.getElementById('demo')!.appendChild(this.geocoder.onAdd(this.map));
-      this.getAddress();
+  formValidation() {
+    if (this.routeForm.invalid) {
+      this.routeForm.markAllAsTouched();
+      return;
+    }
+    this.routeForm.controls['uid'].value?this.updateRoute(): this.saveRoute();
   }
 
-  getAddress(){
-    this.geocoder.on('result', (e) => {
-      console.log(e.result);
-
-      this.address = e.result.place_name;
-      this.long = e.result.geometry.coordinates[0];
-      this.latitude = e.result.geometry.coordinates[1];
-    })
+  resetForm() {
+    this.routeForm = this.createFomRoute();
   }
 
+  editRouteForm(data: Ruta) {
+    this.routeForm = this.createFomRoute(data);
+  }
 
+  deleteCustomer(data: Ruta) {
+    Swal.fire({
+      title: "¿Está seguro de que quiere eliminar este registro?",
+      text: "Puede que esta acción no se pueda deshacer!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Eliminar",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.changeStateRoute(data);
+      }
+    });
+  }
 
+  private saveRoute() {
+    const { uid, ...rest } = this.routeForm.getRawValue();
+    this.apiService
+      .post("rutas", {
+        ...rest,
+      })
+      .subscribe(
+        (resp: any) => {
+          Swal.fire("EXITO", "Ruta creada satisfactoriamente", "success");
+          this.getRoutes();
+        },
 
+        (error: HttpErrorResponse) => {
+          // Si sucede un error
+          console.error(error);
+        }
+      );
+  }
+
+  private updateRoute() {
+    const { uid, ...rest } = this.routeForm.getRawValue();
+    this.apiService
+      .post(`rutas/${uid}`, {
+        ...rest,
+      })
+      .subscribe(
+        (resp: any) => {
+          Swal.fire("EXITO", "Ruta actualizada satisfactoriamente", "success");
+          this.getRoutes();
+        },
+
+        (error: HttpErrorResponse) => {
+          // Si sucede un error
+          console.error(error);
+        }
+      );
+  }
+
+  private changeStateRoute(data: Ruta){
+    data.estado = false;
+    this.apiService.put(`rutas/${data.uid}`, { data }).subscribe(
+      (resp: any) => {
+        this.toastr.success(
+          "La ruta ha sido removida satisfactoriamente",
+          "",
+          {
+            timeOut: 8000,
+            closeButton: true,
+            enableHtml: true,
+            toastClass: "alert alert-success alert-with-icon",
+            positionClass: "toast-top-right",
+          }
+        );
+        this.getRoutes();
+      },
+
+      (error: HttpErrorResponse) => {
+        // Si sucede un error
+        console.error(error);
+      }
+    );
+  }
 }

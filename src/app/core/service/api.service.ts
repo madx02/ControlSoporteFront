@@ -10,7 +10,7 @@ export class ApiService {
     constructor(private http: HttpClient) { }
 
     get token(): string {
-      return localStorage.getItem('x-token') || '';
+      return JSON.parse(localStorage.getItem('x-token')) || '';
     }
 
     get headers() {

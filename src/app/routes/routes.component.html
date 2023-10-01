@@ -7,49 +7,89 @@
         <div class="card-header">
           <h5 class="title">RUTAS</h5>
         </div>
-        <div class="card-body">
+        <div class="card-body" [formGroup]="routeForm">
           <div class="row">
             <div class="col">
-              <div class="form-group">
-                <label>Nombre Ruta</label>
-                <input type="text" class="form-control"  placeholder="Ingrese el nombre de la Ruta" >
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col">
-              <div class="form-group">
-                <label>Nombre Ruta</label>
-                <input type="text" class="form-control"  placeholder="Ingrese el nombre de la Ruta" >
-              </div>
-            </div>
-          </div>
-         <div class="row">
-          <div class="col">
-            <div class="form-group">
-              <label>Nombre Ruta</label>
-              <input type="text" class="form-control"  placeholder="Ingrese el nombre de la Ruta" >
-            </div>
-          </div>
-         </div>
+              <mat-form-field class="full-width" appearance="outline">
+                <mat-label>Nombre ruta</mat-label>
+                <input matInput placeholder="Ingrese nombre de Ruta" autocomplete="off" formControlName="nombre">
 
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <mat-form-field class="full-width" appearance="outline">
+                <mat-label>Descripcion de la ruta</mat-label>
+                <input matInput placeholder="" autocomplete="off" formControlName="descripcion">
+
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <mat-form-field class="full-width" appearance="outline">
+                <mat-label>region</mat-label>
+                <input matInput placeholder="Region de la ruta" autocomplete="off" formControlName="region">
+
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-6">
+              <button class="btn btn-primary mt-4" style="width: 100%;" (click)="formValidation()">Guardar</button>
+            </div>
+            <div class="col-6">
+              <button class="btn btn-default mt-4" style="width: 100%;" (click)="resetForm()">Limpiar</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-6"  >
       <div class="card">
         <div class="card-header">
-          <h5 class="title">MAPA</h5>
+          <h4 class="card-title"> Listado de Rutas</h4>
         </div>
         <div class="card-body">
           <div class="row">
             <div class="col">
-              <div id="demo" class="geocoder"></div>
-              <div id="map" style="width: 100%; height: 400px;" ></div>
+              <div class="table-responsive" style="max-height: 292px;">
+                <table class="table">
+                  <thead>
+
+
+                      <th>Nombre Ruta</th>
+
+                      <th>Editar</th>
+                      <th>Eliminar</th>
+
+                  </thead>
+                  <tbody class="fontTableBody">
+                    <tr *ngFor="let item of routesList">
+                      <td> {{ item.nombre}} </td>
+
+
+                      <td>
+
+                        <button mat-icon-button (click)="editRouteForm(item)" >
+                          <mat-icon>edit</mat-icon>
+                        </button>
+
+                      </td>
+                      <td>
+
+                        <button mat-icon-button color="warn" (click)="deleteCustomer(item)">
+                          <mat-icon>delete</mat-icon>
+                        </button>
+
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
-
-
         </div>
       </div>
     </div>

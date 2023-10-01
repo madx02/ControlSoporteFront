@@ -1,0 +1,148 @@
+<div class="panel-header panel-header-sm">
+</div>
+<div class="main-content">
+  <div class="row">
+    <div class="col-md-6">
+      <div class="card"  [formGroup]="customerForm">
+        <div class="card-header">
+          <h5 class="title">CLIENTES</h5>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-6">
+              <div class="form-group">
+                <label>Id Cliente</label>
+                <input type="text" class="form-control" formControlName="idcliente" >
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="form-group">
+                <label>NIT</label>
+                <input type="text" class="form-control" formControlName="nit" placeholder="Ingrese NIT">
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-6">
+              <div class="form-group">
+                <label>Nombre Comercial</label>
+                <input type="text" class="form-control" formControlName="nombreComercial" placeholder="Ingrese nombre comercial">
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="form-group">
+                <label>Razon Social</label>
+                <input type="text" class="form-control" formControlName="razonSocial" placeholder="Ingrese razon social">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-6">
+              <div class="form-group">
+                <label>Ruta</label>
+                <select formControlName="ruta" class="form-control">
+                  <option *ngFor="let item of routesList" [value]="item.uid" >{{item.nombre}}</option>
+                </select>
+
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="form-group">
+                <label>Dirección</label>
+                <input type="text" class="form-control" formControlName="direccion" placeholder="Número de celular">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-3">
+              <div class="form-group">
+                <label>Telefono</label>
+                <input type="text" class="form-control" formControlName="telefono1" placeholder="Telefono">
+              </div>
+            </div>
+            <div class="col-3">
+              <div class="form-group">
+                <label>Celular</label>
+                <input type="text" class="form-control" formControlName="telefono2" placeholder="Celular">
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="form-group">
+                <label>Correo</label>
+                <input type="text" class="form-control" formControlName="correo1" placeholder="Ingrese correo principal">
+              </div>
+            </div>
+
+          </div>
+          <div class="row">
+            <div class="col-6">
+              <div class="form-group">
+                <label>Ubicación</label>
+                <div id="searchAddrress" class="geocoder" style="width: 100%;"></div>
+              </div>
+            </div>
+            <div class="col-3">
+              <button class="btn btn-primary mt-4" style="width: 100%;" (click)="formValidation()">Guardar</button>
+            </div>
+            <div class="col-3">
+              <button class="btn btn-default mt-4" style="width: 100%;" (click)="resetForm()">Limpiar</button>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <div id="map" style="width: 100%; height: 200px;" ></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header">
+          <h4 class="card-title"> Listado de Clientes</h4>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col">
+              <div class="table-responsive">
+                <table class="table">
+                  <thead>
+
+                      <th>Id</th>
+                      <th>Razon Social</th>
+
+                      <th>Editar</th>
+                      <th>Eliminar</th>
+
+                  </thead>
+                  <tbody class="fontTableBody">
+                    <tr *ngFor="let item of customerList">
+                      <td> {{ item.idcliente}} </td>
+                      <td> {{ item.razonSocial}} </td>
+
+                      <td>
+
+                        <button mat-icon-button (click)="editCustomerForm(item)" >
+                          <mat-icon>edit</mat-icon>
+                        </button>
+
+                      </td>
+                      <td>
+
+                        <button mat-icon-button color="warn" (click)="deleteCustomer(item)">
+                          <mat-icon>delete</mat-icon>
+                        </button>
+
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

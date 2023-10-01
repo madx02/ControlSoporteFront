@@ -28,11 +28,12 @@ export class ValidarSesionGuard implements CanActivate {
       return false;
     }
 
-    // const token = JSON.parse(session);
-    // const tokenExp = token.exp * 1000;
+    var base64Url = session.split('.')[1];
+    var base64 = base64Url.replace('-', '+').replace('_', '/');
+    const token = JSON.parse(window.atob(base64));
+    const tokenExp = token.exp * 1000;
+    return tokenExp >= Date.now();
 
-    // return tokenExp >= Date.now();
-    return true;
   }
 
   private redirectToLogin(): void {

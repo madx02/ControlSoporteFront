@@ -1,0 +1,208 @@
+<div class="panel-header panel-header-sm">
+</div>
+<div class="main-content">
+  <div class="row">
+    <div class="col-md-7"  >
+      <div class="row">
+        <div class="col">
+          <div class="card">
+            <div class="card-header">
+              <h4 class="card-title"> Listado de planifiaciones asignadas</h4>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col">
+                  <div class="table-responsive" style="max-height: 208px;">
+                    <table class="table">
+                      <thead>
+
+
+                          <th>Planificación</th>
+
+                          <th>Descripcion</th>
+                          <th>Fecha </th>
+                          <th>Atender</th>
+                          <th>Mapa</th>
+
+                      </thead>
+                      <tbody class="fontTableBody">
+                        <tr *ngFor="let item of plannedList">
+                          <td> {{ item.idPlanned}} </td>
+                          <td> {{ item.descripcion}} </td>
+                          <td> {{ item.fecha_programada | date: 'dd/MM/yyyy'}} </td>
+                          <td>
+                            <button mat-icon-button (click)="editHomeVisitPlanned(item)" >
+                              <mat-icon>help_outline</mat-icon>
+                            </button>
+                          </td>
+                          <td>
+                            <button mat-icon-button (click)="openDialog(item)">
+                              <mat-icon>map</mat-icon>
+                            </button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <div class="card">
+            <div class="card-header">
+              <h4 class="card-title"> Visitas en Proceso</h4>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col">
+                  <div class="table-responsive" style="max-height: 208px;">
+                    <table class="table">
+                      <thead>
+
+
+                          <th>Visita</th>
+
+                          <th>Descripcion</th>
+                          <th>Fecha </th>
+                          <th>Finalizar</th>
+
+
+
+                      </thead>
+                      <tbody class="fontTableBody">
+                        <tr *ngFor="let item of homeVisitList">
+                          <td> {{ item.idPlanned}} </td>
+                          <td> {{ item.descripcion}} </td>
+                          <td> {{ item.fecha_inicio | date: 'dd/MM/yyyy'}} </td>
+                          <td>
+                            <button mat-icon-button (click)="editHomeVisitForm(item)" >
+                              <mat-icon>help_outline</mat-icon>
+                            </button>
+                          </td>
+
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-5">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="title">Visitas</h5>
+        </div>
+        <div class="card-body" [formGroup]="homeVisitForm">
+          <div class="row">
+            <div class="col-6">
+              <mat-form-field class="full-width" appearance="outline">
+                <mat-label>Número de visita</mat-label>
+                <input matInput placeholder="" autocomplete="off" formControlName="idVisita">
+
+              </mat-form-field>
+            </div>
+            <div class="col-6">
+              <mat-form-field class="full-width" appearance="outline">
+                <mat-label>Planación</mat-label>
+                <input matInput placeholder="" autocomplete="off" formControlName="planned">
+
+              </mat-form-field>
+            </div>
+          </div>
+
+
+
+          <div class="row">
+            <div class="col">
+              <mat-form-field class="full-width" appearance="outline">
+                <mat-label>Asunto</mat-label>
+                <input matInput placeholder="" autocomplete="off" formControlName="descripcion">
+
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col">
+              <mat-form-field class="full-width" appearance="outline">
+                <mat-label>Cliente</mat-label>
+                <input matInput placeholder="" autocomplete="off" formControlName="cliente">
+
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <mat-form-field class="full-width" appearance="outline">
+                <mat-label>Estado Visita </mat-label>
+                <mat-select name="plannedStatus" formControlName="situacion">
+                  <mat-option *ngFor="let item of vistSituation" [value]="item.situacion">
+                   {{item.descripcion}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="row">
+            <div [ngClass]= "{'col-6':homeVisitForm.controls['idVisita'].value, 'col':!homeVisitForm.controls['idVisita'].value}" class="col-6">
+              <mat-form-field class="full-width" appearance="outline">
+                <mat-label>Fecha Inicio Visita</mat-label>
+                <input matInput [matDatepicker]="picker" formControlName="fecha_inicio">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+
+              </mat-form-field>
+            </div>
+            <div *ngIf="homeVisitForm.controls['idVisita'].value" class="col-6">
+              <mat-form-field class="full-width" appearance="outline">
+                <mat-label>Fecha Fin Visita</mat-label>
+                <input matInput [matDatepicker]="picker2" formControlName="fecha_fin">
+                <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                <mat-datepicker #picker2></mat-datepicker>
+
+              </mat-form-field>
+            </div>
+          </div>
+
+
+          <div *ngIf="homeVisitForm.controls['idVisita'].value" class="row">
+            <div class="col">
+              <mat-form-field class="full-width" appearance="outline">
+                <mat-label>Descripcion Inconveniente</mat-label>
+                <input matInput placeholder="" autocomplete="off" formControlName="observacion1">
+
+              </mat-form-field>
+            </div>
+          </div>
+          <div *ngIf="homeVisitForm.controls['idVisita'].value" class="row">
+            <div class="col">
+              <mat-form-field class="full-width" appearance="outline">
+                <mat-label>Descripcion Solución</mat-label>
+                <input matInput placeholder="" autocomplete="off" formControlName="observacion2">
+
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-6">
+              <button class="btn btn-primary mt-4" style="width: 100%;" (click)="formValidation()">Guardar</button>
+            </div>
+            <div class="col-6">
+              <button class="btn btn-default mt-4" style="width: 100%;" (click)="resetForm()">Limpiar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
